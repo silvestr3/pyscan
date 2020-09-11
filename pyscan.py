@@ -68,7 +68,7 @@ def generateReport(results):
         ips.append('\n'.join(item[1]))
         ports.append(', '.join(map(str, item[2])))
 
-    df = pandas.DataFrame(data={"hosts" : hosts, "ips" : ips, "ports" : ports})
+    df = pandas.DataFrame(data={"HOSTS" : hosts, "IPS" : ips, "PORTS" : ports})
     df.to_csv("./pyscan_log.csv", sep=',', index=False)
 
 
