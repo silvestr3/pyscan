@@ -1,5 +1,6 @@
 # pyscan
-Python version of ipscan. Faster, more organized and clean, and generates a csv report with the results. 
+Python version of ipscan. Faster, more organized, cleaner, and generates a csv report with the results.
+Takes a list of hosts, resolves DNS and performs portscan using **python-masscan**
 This script need root privileges to run.
 
 ## Example usage
