@@ -4,6 +4,7 @@ This script need root privileges to run.
 
 ## Example usage
 ```bash
+pip install -r requirements.txt
 sudo python pyscan.py -f hosts -p 22,80,443
 ```
 
