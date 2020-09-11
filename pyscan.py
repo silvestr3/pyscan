@@ -9,6 +9,11 @@ import pandas
 import logging
 import coloredlogs
 
+logger = logging.getLogger('pyscan')
+logger.setLevel(logging.DEBUG)
+
+coloredlogs.install(fmt='[%(asctime)s] [%(levelname)s] %(message)s', level='DEBUG')
+
 def getHosts(file):
     with open(file, 'r') as hosts_file:
         hosts = hosts_file.readlines()
@@ -40,12 +45,15 @@ def doPortscan(hostname, ports, redundant):
     if 'A' in info.keys():
         target_ip = info['A'][0]
         if target_ip not in redundant.keys():
-            mas = masscan.PortScanner()
-            mas.scan(target_ip, ports=ports, arguments='--max-rate 5000')
+            try:
+                mas = masscan.PortScanner()
+                mas.scan(target_ip, ports=ports, arguments='--max-rate 5000')
 
-            results = mas.scan_result['scan']
-            for item in results[target_ip]['tcp'].keys():
-                open_ports.append(item)
+                results = mas.scan_result['scan']
+                for item in results[target_ip]['tcp'].keys():
+                    open_ports.append(item)
+            except Exception:
+                logger.error('Network is unreachable')
         else:
             open_ports = redundant[target_ip]
     return open_ports
@@ -74,11 +82,6 @@ def main():
                                                                         separated by comma, or a range (default: 1-65535)')
 
     args = parser.parse_args()
-
-    logger = logging.getLogger('pyscan')
-    logger.setLevel(logging.DEBUG)
-
-    coloredlogs.install(fmt='[%(asctime)s] [%(levelname)s] %(message)s', level='DEBUG')
 
     if os.getuid() != 0:
         logger.critical('This script needs root privileges to run. Aborting now.')
