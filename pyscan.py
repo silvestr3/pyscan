@@ -8,11 +8,26 @@ import dns.resolver
 import pandas
 import logging
 import coloredlogs
+import threading
 
 logger = logging.getLogger('pyscan')
 logger.setLevel(logging.DEBUG)
 
 coloredlogs.install(fmt='[%(asctime)s] [%(levelname)s] %(message)s', level='DEBUG')
+
+def banner():
+    print '-' * 65
+    print """
+           ____  __  ________________ _____ 
+          / __ \/ / / / ___/ ___/ __ `/ __ \\
+         / /_/ / /_/ (__  ) /__/ /_/ / / / /
+        / .___/\__, /____/\___/\__,_/_/ /_/ 
+       /_/    /____/ 
+    """
+
+    print 'pyScan - A scanning tool for portscanning a list of hostnames '
+    print 'Author: Fellipe Silvestre (montg0mery)'
+    print '-' * 65
 
 def getHosts(file):
     with open(file, 'r') as hosts_file:
@@ -73,11 +88,13 @@ def generateReport(results):
 
 
 def main():
+    banner()
+
     parser = argparse.ArgumentParser(description='Takes a list of hostnames, resolves their ip and\
                                                   performs portscan using masscan')
 
     parser.add_argument('-f', '--file', type=str, required=True, help='File containing hostnames')
-    parser.add_argument('-p', '--port', type=str, required=False, help='Ports to scan.\
+    parser.add_argument('-p', '--ports', type=str, required=False, help='Ports to scan.\
                                                                         You can either specify a single port, a list of ports\
                                                                         separated by comma, or a range (default: 1-65535)')
 
@@ -87,10 +104,10 @@ def main():
         logger.critical('This script needs root privileges to run. Aborting now.')
         sys.exit()
     else:    
-        if args.port == None:
+        if args.ports == None:
             ports = '1-65535'
         else:
-            ports = args.port
+            ports = args.ports
         
         hosts = getHosts(args.file)
 
