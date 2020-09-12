@@ -8,7 +8,6 @@ import dns.resolver
 import pandas
 import logging
 import coloredlogs
-import threading
 
 logger = logging.getLogger('pyscan')
 logger.setLevel(logging.DEBUG)
