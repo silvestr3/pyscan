@@ -10,6 +10,6 @@ sudo python pyscan.py -f hosts -p 22,80,443
 ```
 
 ## ToDo
-* Add multithreadding
-* Add a nice banner
-* Add subdomain takeover check on CNAME records (?)
+* [X] Add a nice banner
+* [ ] Add multithreadding
+* [ ] Add subdomain takeover check on CNAME records (?)
