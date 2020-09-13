@@ -15,18 +15,19 @@ logger.setLevel(logging.DEBUG)
 coloredlogs.install(fmt='[%(asctime)s] [%(levelname)s] %(message)s', level='DEBUG')
 
 def banner():
-    print '-' * 65
-    print """
+    print u'\u001b[33;1m-\u001b[0m' * 65
+    print u"""\u001b[31;1m
            ____  __  ________________ _____ 
           / __ \/ / / / ___/ ___/ __ `/ __ \\
          / /_/ / /_/ (__  ) /__/ /_/ / / / /
         / .___/\__, /____/\___/\__,_/_/ /_/ 
        /_/    /____/ 
+    \u001b[0m
     """
 
-    print 'pyScan - A scanning tool for portscanning a list of hostnames '
-    print 'Author: Fellipe Silvestre (montg0mery)'
-    print '-' * 65
+    print u'\u001b[37;1mpyScan - A scanning tool for portscanning a list of hostnames\u001b[0m'
+    print u'\u001b[37;1mAuthor: Fellipe Silvestre (montg0mery)\u001b[0m'
+    print u'\u001b[33;1m-\u001b[0m' * 65
 
 def getHosts(file):
     with open(file, 'r') as hosts_file:
@@ -37,7 +38,7 @@ def getHosts(file):
 
 
 def getDNSInfo(hostname):
-    ids = ['A', 'CNAME']
+    ids = ['A', 'MX', 'CNAME']
     dns_info = dict()
     
     for i in ids:
