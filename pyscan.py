@@ -157,7 +157,8 @@ def main():
         if args.threads == None:
             threads = 1
         elif int(args.threads) > 20:
-            logger.critical('Maximum threads: 20')
+            logger.critical('Maximum threads exceeded (20)')
+            sys.exit()
         else:
             threads = args.threads
 
