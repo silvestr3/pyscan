@@ -256,6 +256,10 @@ def threader():
                         item.append(host)
                         item.append(dns_info['CNAME'])
                         item.append('')
+                    else:
+                        item.append(host)
+                        item.append('')
+                        item.append('')
                 else:
                     item.append(host)
                     item.append('')
