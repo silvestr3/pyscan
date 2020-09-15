@@ -12,4 +12,4 @@ sudo python pyscan.py -f hosts -p 22,80,443
 ## ToDo
 * [X] Add a nice banner
 * [X] Implement multithreadding
-* [ ] Add subdomain takeover check on CNAME records (?)
+* [X] Implement subdomain takeover check on CNAME records (?)
