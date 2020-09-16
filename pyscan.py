@@ -216,11 +216,15 @@ def takeoverCheck(host):
             if d in cname:
                 service = d_keys[d_vals.index(tld)]
 
-    r = requests.get(cname).text
-    if fingerprints[service] in r:
-        return True
-    else:
-        return False
+    url = 'http://' + host
+    try:
+        r = requests.get(url).text
+        if fingerprints[service] in r:
+            return True
+        else:
+            return False
+    except Exception as e:
+        logger.error(e)
 
 
 results = []
