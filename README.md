@@ -3,7 +3,7 @@ Python version of ipscan. Faster, more organized, cleaner, and generates a csv r
 Takes a list of hosts, resolves DNS and performs portscan using **python-masscan**.
 This script need root privileges to run.
 
-## New feature
+#### New feature
 Now pyscan also scans for subdomain takeover on CNAME records using fingerprints from https://github.com/EdOverflow/can-i-take-over-xyz
 
 ## Example usage
