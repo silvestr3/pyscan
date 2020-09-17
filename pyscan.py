@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import masscan
 import argparse
@@ -37,19 +37,19 @@ coloredlogs.install(fmt='[%(asctime)s] [%(levelname)s] %(message)s', level='DEBU
 q = Queue()
 
 def banner():
-    print u'\u001b[33;1m-\u001b[0m' * 65
-    print u"""\u001b[31;1m
+    print (u'\u001b[33;1m-\u001b[0m' * 65)
+    print (u"""\u001b[31;1m
            ____  __  ________________ _____ 
           / __ \/ / / / ___/ ___/ __ `/ __ \\
          / /_/ / /_/ (__  ) /__/ /_/ / / / /
         / .___/\__, /____/\___/\__,_/_/ /_/ 
        /_/    /____/ 
     \u001b[0m
-    """
+    """)
 
-    print u'\u001b[37;1mpyScan - A scanning tool for portscanning a list of hostnames\u001b[0m'
-    print u'\u001b[37;1mAuthor: Fellipe Silvestre (montg0mery)\u001b[0m'
-    print u'\u001b[33;1m-\u001b[0m' * 65
+    print (u'\u001b[37;1mpyScan - A scanning tool for portscanning a list of hostnames\u001b[0m')
+    print (u'\u001b[37;1mAuthor: Fellipe Silvestre (montg0mery)\u001b[0m')
+    print (u'\u001b[33;1m-\u001b[0m' * 65)
 
 def getHosts(file):
     with open(file, 'r') as hosts_file:
@@ -65,7 +65,7 @@ def getDNSInfo(hostname):
     
     for i in ids:
         try:
-            answer = dns.resolver.query(hostname, i)
+            answer = dns.resolver.resolve(hostname, i)
             val = []
             for rdata in answer:
                 val.append(rdata.to_text())
@@ -271,15 +271,13 @@ def threader():
         q.task_done()
         results.append(item)
         
-
-
 def main():
     banner()
 
     if os.getuid() != 0:
         logger.critical('This script needs root privileges to run. Aborting now.')
         sys.exit()
-    else:    
+    else:  
         hosts = getHosts(args.file)
         logger.info('Total hosts to scan: {}'.format(len(hosts)))
 
@@ -303,7 +301,6 @@ def main():
             
         generateReport(results)
         logger.info('Results saved into pyscan_log.csv')
-    
 
 if __name__ == '__main__':
     main()
