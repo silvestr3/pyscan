@@ -113,120 +113,6 @@ def generateReport(results):
     df.to_csv("./pyscan_log.csv", sep=',', index=False)
 
 
-def takeoverCheck(host):
-    cname = getDNSInfo(host)['CNAME']
-
-    domains = {
-        'Agile CRM' : ['agilecrm.com'],
-        'Airee.ru' : ['airee.ru'],
-        'Anima' : ['animaapp.com'],
-        'AWS/S3' : ['s3.amazonaws.com'],
-        'Bitbucket' : ['bitbucket.org'],
-        'Campaign Monitor' : ['createsend.com'],
-        'Cargo Collective' : ['cargocollective.com'],
-        'Digital Ocean' : ['digitalocean.com'],
-        'Fastly' : ['fastly.net'],
-        'Feedpress' : ['feedpress.me'],
-        'Fly.io' : ['fly.io'],
-        'Gemfury' : ['gemfury.com', 'furyns.com'],
-        'Ghost' : ['ghost.io'],
-        'Github' : ['github.io'],
-        'HatenaBlog' : ['hatenablog.com'],
-        'Help Juice' : ['helpjuice.com'],
-        'Help Scout' : ['helpscoutdocs.com'],
-        'Heroku' : ['herokudns.com', 'herokuapp.com', 'herokussl.com'],
-        'Intercom' : ['intercom.help'],
-        'JetBrains' : ['myjetbrains.com'],
-        'Kinsta' : ['kinstasite.com', 'kinsta.cloud'],
-        'LaunchRock' : ['launchrock.com'],
-        'Microsoft Azure' : ['cloudapp.net', 'cloudapp.azure.com', 'azurewebsites.net', 'blob.core.windows.net',
-                            'cloudapp.azure.com', 'azure-api.net', 'azurehdinsight.net', 'azureedge.net',
-                            'azurecontainer.io', 'database.windows.net', 'azuredatalakestore.net', 'search.windows.net',
-                            'azurecr.io', 'redis.cache.windows.net', 'azurehdinsight.net', 'servicebus.windows.net',
-                            'visualstudio.com'],
-        'Netlify' : ['netlify.com'],
-        'Ngrok' : ['ngrok.com', 'ngrok.io'],
-        'Pantheon' : ['pantheon.io'],
-        'Pingdom' : ['pingdom.com'],
-        'Readme.io': ['readme.io'],
-        'Shopify' : ['myshopify.com', 'shops.myshopify.com'],
-        'SmartJobBoard' : ['smartjobboard.com', 'mysmartjobboard.com'],
-        'Statuspage' : ['stspg-customer.com'],
-        'Strikingly' : ['strikinglydns.com'],
-        'Surge.sh' : ['surge.sh'],
-        'Tumblr' : ['tumblr.com'],
-        'Tilda' : ['tilda'],
-        'Uberflip' : ['uberflip.com'],
-        'Uptimerobot' : ['uptimerobot.com'],
-        'UserVoice' : ['uservoice.com'],
-        'Wordpress' : ['wordpress.com'],
-        'Worksites' : ['worksites.net']
-    }
-
-    fingerprints = {
-        'Agile CRM' : 'Sorry, this page is no longer available.',
-        'Airee.ru' : ' ',
-        'Anima' : 'If this is your website and you\'ve just created it, try refreshing in a minute',
-        'AWS/S3' : 'The specified bucket does not exist',
-        'Bitbucket' : 'Repository not found',
-        'Campaign Monitor' : 'Trying to access your account?',
-        'Cargo Collective' : '404 Not Found',
-        'Digital Ocean' : 'Domain uses DO name serves with no records in DO.',
-        'Fastly' : 'Fastly error: unknown domain:',
-        'Feedpress' : 'The feed has not been found.',
-        'Fly.io' : '404 Not Found',
-        'Gemfury' : '404: This page could not be found.',
-        'Ghost' : 'The thing you were looking for is no longer here, or never was',
-        'Github' : 'There isn\'t a Github Pages site here.',
-        'HatenaBlog' : '404 Blog is not found',
-        'Help Juice' : 'We could not find what you\'re looking for.',
-        'Help Scout' : 'No settings were found for this company:',
-        'Heroku' : 'No such app',
-        'Intercom' : 'Uh oh. That page doesn\'t exist.',
-        'JetBrains' : 'is not a registered InCloud YouTrack',
-        'Kinsta' : 'No Site For Domain',
-        'LaunchRock' : 'It looks like you may have taken a wrong turn somewhere. Don\'t worry...it happens to all of us.',
-        'Microsoft Azure' : ' ',
-        'Netlify' : ' ',
-        'Ngrok' : 'Tunnel *.ngrok.io not found',
-        'Pantheon' : '404 error unknown site!',
-        'Pingdom' : 'This public report page has not been activated by the user',
-        'Readme.io': 'Project doesnt exist... yet!',
-        'Shopify' : 'Sorry, this shop is currently unavailable.',
-        'SmartJobBoard' : 'This job board website is either expired or its domain name is invalid.',
-        'Statuspage' : 'redirect',
-        'Strikingly' : 'page not found',
-        'Surge.sh' : 'project not found',
-        'Tumblr' : 'Whatever you were looking for doesn\'t currently exist at this address',
-        'Tilda' : 'Please renew your subscription',
-        'Uberflip' : 'Non-hub domain, The URL you\'ve accessed does not provide a hub.',
-        'Uptimerobot' : 'page not found',
-        'UserVoice' : 'This UserVoice subdomain is currently available!',
-        'Wordpress' : 'Do you want to register *.wordpress.com?',
-        'Worksites' : 'Hello! Sorry, but the website you&rsquo;re looking for doesn&rsquo;t exist.'
-    }
-
-    service = ''
-
-    d_keys = list(domains.keys())
-    d_vals = list(domains.values())
-
-    for tld in d_vals:
-        for d in tld:
-            if d in cname:
-                service = d_keys[d_vals.index(tld)]
-
-    url = 'http://' + host
-    try:
-        r = requests.get(url).text
-        if fingerprints[service] in r:
-            return True
-        else:
-            return False
-    except Exception as e:
-        logger.error(e)
-
-
 results = []
 redundant = dict()
 
@@ -254,20 +140,9 @@ def threader():
                 item.append('')
             else:
                 logger.warning(u'The DNS query for \u001b[32;1m{}\u001b[0m did not return any A record'.format(host))
-                if 'CNAME' in dns_info.keys():
-                    if takeoverCheck(host) == True:
-                        logger.critical(u'Subdomain takeover may be possible on \u001b[32;1m{}\u001b[0m'.format(host)) 
-                        item.append(host)
-                        item.append(dns_info['CNAME'])
-                        item.append('')
-                    else:
-                        item.append(host)
-                        item.append('')
-                        item.append('')
-                else:
-                    item.append(host)
-                    item.append('')
-                    item.append('')
+                item.append(host)
+                item.append('')
+                item.append('')
         q.task_done()
         results.append(item)
         
