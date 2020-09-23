@@ -60,7 +60,7 @@ def getHosts(file):
 
 
 def getDNSInfo(hostname):
-    ids = ['A', 'CNAME']
+    ids = ['A']
     dns_info = dict()
     
     for i in ids:
@@ -115,10 +115,11 @@ def generateReport(results):
 
 results = []
 redundant = dict()
+list_lock = threading.Lock()
 
 def threader():
-    item = []
     while True:
+        item = []
         host = q.get()
 
         logger.info(u'Current host: \u001b[32;1m{}\u001b[0m'.format(host))
@@ -143,8 +144,10 @@ def threader():
                 item.append(host)
                 item.append('')
                 item.append('')
+        with list_lock:
+            results.append(item)
         q.task_done()
-        results.append(item)
+
         
 def main():
     banner()
@@ -157,7 +160,7 @@ def main():
         logger.info('Total hosts to scan: {}'.format(len(hosts)))
 
         if args.threads == None:
-            threads = 1
+            threads = 2
         elif int(args.threads) > 20:
             logger.critical('Maximum threads exceeded (20)')
             sys.exit()
