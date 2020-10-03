@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description='Takes a list of hostnames, resolve
                                                   performs portscan using masscan')
 
 parser.add_argument('-f', '--file', type=str, metavar='', required=True, help='File containing hostnames')
+parser.add_argument('-o', '--out', type=str, metavar='', required=True, help='File to save the results')
 parser.add_argument('-p', '--ports', type=str, metavar='', required=False, help='Ports to scan.\
                                                                         You can either specify a single port, a list of ports\
                                                                         separated by comma, or a range (default: 1-65535)')
@@ -103,14 +104,15 @@ def generateReport(results):
 
     for item in results:
         hosts.append(item[0])
-        ips.append('\n'.join(item[1]))
+        ips.append(', '.join(item[1]))
         ports.append(', '.join(map(str, item[2])))
 
     df = pandas.DataFrame(data={"HOSTS" : hosts,
                                 "IPS" : ips,
                                 "PORTS" : ports,
                                 })
-    df.to_csv("./pyscan_log.csv", sep=',', index=False)
+    out = args.out
+    df.to_csv(out, sep=',', index=False)
 
 
 results = []
@@ -178,7 +180,7 @@ def main():
         q.join()
             
         generateReport(results)
-        logger.info('Results saved into pyscan_log.csv')
+        logger.info('Results saved into {}'.format(args.out))
 
 if __name__ == '__main__':
     main()
