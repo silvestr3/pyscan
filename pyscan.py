@@ -49,7 +49,7 @@ def banner():
     """)
 
     print (u'\u001b[37;1mpyScan - A scanning tool for portscanning a list of hostnames\u001b[0m')
-    print (u'\u001b[37;1mAuthor: Fellipe Silvestre (montg0mery)\u001b[0m')
+    print (u'\u001b[37;1mAuthor: Fellipe Silvestre (silvestre)\u001b[0m')
     print (u'\u001b[33;1m-\u001b[0m' * 65)
 
 def getHosts(file):
